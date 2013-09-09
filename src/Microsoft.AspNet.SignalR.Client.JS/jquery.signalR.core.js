@@ -317,8 +317,8 @@
 
             this.url = url;
             this.qs = qs;
-            this.keepAliveData = {};
             this._ = {
+                keepAliveData: {},
                 connectingMessageBuffer: new ConnectingMessageBuffer(this, function (message) {
                     $connection.triggerHandler(events.onReceived, [message]);
                 }),
@@ -577,7 +577,7 @@
 
                             window.clearTimeout(connection._.onFailedTimeoutHandle);
 
-                            if (transport.supportsKeepAlive && connection.keepAliveData.activated) {
+                            if (transport.supportsKeepAlive && connection._.keepAliveData.activated) {
                                 signalR.transports._logic.monitorKeepAlive(connection);
                             }
 
@@ -674,7 +674,7 @@
                             return;
                         }
 
-                        keepAliveData = connection.keepAliveData;
+                        keepAliveData = connection._.keepAliveData;
                         connection.appRelativeUrl = res.Url;
                         connection.id = res.ConnectionId;
                         connection.token = res.ConnectionToken;
@@ -909,7 +909,7 @@
                         connection.transport.abort(connection, async);
                     }
 
-                    if (connection.transport.supportsKeepAlive && connection.keepAliveData.activated) {
+                    if (connection.transport.supportsKeepAlive && connection._.keepAliveData.activated) {
                         signalR.transports._logic.stopMonitoringKeepAlive(connection);
                     }
 
